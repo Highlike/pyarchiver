@@ -21,16 +21,14 @@ def tar_file_list(file, dir):
     if not isinstance(dir, str):
         raise ValueError("This is not a valid directory")
     names = file.getnames()
+    current_level = len(dir.split("/"))
     new_dir = []
-    current_level = len(dir.split("/")) 
     for item in names:
-        item_list = item.split('/')
+        item_list = item.split("/")
         if len(item_list) == current_level:
-            dir2 = item_list[current_level - 1]
             if item.startswith(dir):
-                new_dir.append(dir) 
-        current_level += 1
-        return new_dir
+                new_dir.append(item)
+    return new_dir
 
 if __name__ == '__main__':
     script, file = sys.argv
