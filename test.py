@@ -13,7 +13,7 @@ class pyArchiverTest(unittest.TestCase):
     def test_tar_file_list(self):
         with tarfile.open(self.tar_archive) as file:
             self.assertEqual(pyarchiver.tar_file_list(file, ""), ["marples-black"])
-            self.assertEqual(pyarchiver.tar_file_list(file, 'marples-black'), ['gtk-2.0', 'gtk-3.0', 'metacity-1', '.icon-theme.cache', 'down transparent.png', 'index.theme', 'panelbg.png', 'up transparent.png'])
+            self.assertEqual(pyarchiver.tar_file_list(file, "marples-black"), ["gtk-2.0", "gtk-3.0", "metacity-1", ".icon-theme.cache", "down transparent.png", "index.theme", "panelbg.png", "up transparent.png"])
 
 if __name__ == '__main__':
     unittest.main()
