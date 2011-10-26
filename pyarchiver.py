@@ -17,7 +17,7 @@ def tar(name):
         names = file.getnames()
         current_dir = ''
         new_dir = []
-        current_level = 2
+        current_level = 1
         for x in names:
             x_list = x.split('/')
             if len(x_list) == current_level:
