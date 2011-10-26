@@ -36,7 +36,7 @@ def tar_file_list(file, dir):
         if len(item_list) == current_level:
             if item.startswith(dir):
                 new_dir.append(item_list[-1])
-    return set(new_dir)
+    return sorted(new_dir)
 
 if __name__ == '__main__':
     script, file = sys.argv
