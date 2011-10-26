@@ -25,9 +25,9 @@ def tar_file_list(file, dir):
     new_dir = []
     for item in names:
         item_list = item.split("/")
-        if len(item_list) == current_level:
+        if len(item_list) == current_level + 1:
             if item.startswith(dir):
-                new_dir.append(item)
+                new_dir.append(item_list[-1])
     return new_dir
 
 if __name__ == '__main__':
