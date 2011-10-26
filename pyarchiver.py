@@ -16,6 +16,9 @@ def tar(name):
     with tarfile.open(name) as file:
         tar_file_list(file)
 
+def zip(name):
+    with zipfile.open(name) as file:
+        zip_file_list(file)
 
 def tar_file_list(file, dir):
     if not isinstance(dir, str):
@@ -37,3 +40,8 @@ def tar_file_list(file, dir):
 
 if __name__ == '__main__':
     script, file = sys.argv
+    archive = determine_filetype(file)
+    if archive == "is_tar":
+        tar(file)
+    elif archive == "is_zip":
+        zip(file)
