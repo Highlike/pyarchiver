@@ -14,7 +14,7 @@ class pyArchiverTest(unittest.TestCase):
         with tarfile.open(self.tar_archive) as file:
             self.assertEqual(pyarchiver.tar_file_list(file, ""), sorted(["marples-black"]))
             self.assertEqual(pyarchiver.tar_file_list(file, "marples-black/"), sorted(["gtk-2.0", "gtk-3.0", "metacity-1", ".icon-theme.cache", "down transparent.png", "index.theme", "panelbg.png", "up transparent.png"]))
-            self.assertEqual(pyarchiver.tar_file_list(file, "marples-black/gtk-3.0"), sorted(["assets", "img", "gpl.txt", "gtk.css", "gtk.css~", "gtk-widgets.css", "gtk-widgets.css~", "settings.ini", "settings.ini~"]))
+            self.assertEqual(pyarchiver.tar_file_list(file, "marples-black/gtk-3.0"), sorted(["assets", "gpl.txt", "gtk.css", "gtk.css~", "gtk-widgets.css", "gtk-widgets.css~", "settings.ini", "settings.ini~"]))
 
 
 if __name__ == '__main__':
