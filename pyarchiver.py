@@ -35,9 +35,8 @@ def tar_file_list(file, dir):
         return sorted(new_dir)
 
 ### GUI ###
-def user_interaction(win, y, dir_list, screen, archive):
-    c = 0
-    while not c == ord('l'):
+def user_interaction(win, y, dir_list, archive, dir):
+    while True:
         c = win.getch()
         if c == ord('j') and y < len(dir_list):
             win.move(y, 1)
@@ -54,13 +53,26 @@ def user_interaction(win, y, dir_list, screen, archive):
             win.addstr("-->")
             win.refresh()
         elif c == ord('l'):
+            if not dir == '':
+                new_dir = dir + "/" + dir_list[y - 1]
+            else:
+                new_dir = dir_list[y - 1]
+            main(win, archive, new_dir)
+        elif c == ord('h'):
             win.erase()
-            dir = dir_list[y - 1]
-            initialize(screen, archive, dir)
+            path_list = dir.split("/")
+            if len(path_list) > 1:
+                new_dir = path_list[-2]
+            else:
+                new_dir = ""
+            main(win, archive, new_dir)
 
-def initialize(screen, archive, dir=""):
+def initialize(screen, archive):
     win = curses.newwin(10, 90)
+    main(win, archive)
 
+def main(win, archive, dir=''):
+    win.erase()
     try:
         dir_list = tar_file_list(archive, dir)
     except ValueError:
@@ -71,20 +83,21 @@ def initialize(screen, archive, dir=""):
         win.move(x, 6)
         win.addstr(str(item))
 
-        y = 1
-        win.move(y, 1)
-        win.addstr("-->")
+    y = 1
+    win.move(y, 1)
+    win.addstr("-->")
 
-        win.refresh
+    win.refresh
 
-    user_interaction(win, y, dir_list, screen, archive)
-   
+    user_interaction(win, y, dir_list, archive, dir)
+### GUI ####
+
 if __name__ == '__main__':
     script, file = sys.argv
     archive = determine_filetype(file)
     if archive == "is_tar":
         with tarfile.open(file) as f:
-            curses.wrapper(initialize, f)
+            curses.wrapper(main, f)
     elif archive == "is_zip":
         with zipfile.open(file) as f:
-            curses.wrapper(initialize, f)
+            curses.wrapper(main, f)
