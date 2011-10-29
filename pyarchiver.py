@@ -61,10 +61,7 @@ def user_interaction(win, y, dir_list, archive, dir):
         elif c == ord('h'):
             win.erase()
             path_list = dir.split("/")
-            if len(path_list) > 1:
-                new_dir = path_list[-2]
-            else:
-                new_dir = ""
+            new_dir = '/'.join(path_list[:-1])
             main(win, archive, new_dir)
 
 def initialize(screen, archive):
