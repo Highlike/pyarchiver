@@ -46,8 +46,6 @@ def user_interaction(win, y, dir_list, archive, dir):
         if 'y2' in locals():
             win.move(y2, 1)
             win.addstr('     ')
-        else:
-            pass
 
         if c == ord('j') and y < len(dir_list):
             win.move(y, 1)
