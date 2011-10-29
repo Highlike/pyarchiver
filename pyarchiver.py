@@ -34,10 +34,21 @@ def tar_file_list(file, dir):
     else:
         return sorted(new_dir)
 
+def extract(archive, path):
+    member = archive.getmember(path)
+    archive.extract(member)
+
 ### GUI ###
 def user_interaction(win, y, dir_list, archive, dir):
     while True:
         c = win.getch()
+
+        if 'y2' in locals():
+            win.move(y2, 1)
+            win.addstr('     ')
+        else:
+            pass
+
         if c == ord('j') and y < len(dir_list):
             win.move(y, 1)
             win.addstr('   ')
@@ -63,6 +74,18 @@ def user_interaction(win, y, dir_list, archive, dir):
             path_list = dir.split("/")
             new_dir = '/'.join(path_list[:-1])
             main(win, archive, new_dir)
+        elif c == ord('e'):
+            if not dir == '':
+                selected_dir = dir + '/' + dir_list[y - 1]
+            else:
+                selected_dir = dir_list[y - 1]
+            extract(archive, selected_dir)
+            y2 = len(dir_list) + 2
+            win.move(y2, 1)
+            win.addstr('done!')
+            win.refresh()
+        elif c == ord('q'):
+            sys.exit()
 
 def initialize(screen, archive):
     win = curses.newwin(10, 90)
