@@ -39,60 +39,10 @@ def extract(archive, path):
     archive.extract(member)
 
 ### GUI ###
-class Keybinding:
-        if 'y2' in locals():
-            win.move(y2, 1)
-            win.addstr('     ')
-
-        if c == ord('j') and y < len(dir_list):
-            win.move(y, 1)
-            win.addstr('   ')
-            y += 1
-            win.move(y, 1)
-            win.addstr("-->")
-            win.refresh()
-        elif c == ord('k') and y > 1:
-            win.move(y, 1)
-            win.addstr('   ')
-            y -= 1
-            win.move(y, 1)
-            win.addstr("-->")
-            win.refresh()
-
-    def dir_forward():
-        elif c == ord('l'):
-            if not dir == '':
-                new_dir = dir + "/" + dir_list[y - 1]
-            else:
-                new_dir = dir_list[y - 1]
-            main(win, archive, new_dir)
-
-    def dir_back():
-        elif c == ord('h'):
-            win.erase()
-            path_list = dir.split("/")
-            new_dir = '/'.join(path_list[:-1])
-            main(win, archive, new_dir)
-
-    def extract_item():
-        elif c == ord('e'):
-            if not dir == '':
-                selected_dir = dir + '/' + dir_list[y - 1]
-            else:
-                selected_dir = dir_list[y - 1]
-            extract(archive, selected_dir)
-            y2 = len(dir_list) + 2
-            win.move(y2, 1)
-            win.addstr('done!')
-            win.refresh()
-
-    def exit():
-        elif c == ord('q'):
-            sys.exit()
-
 def initialize(screen, archive):
     win = curses.newwin(10, 90)
-    main(win, archive)
+    while True:
+        main(win, archive)
 
 def main(win, archive, dir=''):
     win.erase()
@@ -112,9 +62,79 @@ def main(win, archive, dir=''):
 
     win.refresh
 
-    while True:
-        Keybinding
+    keybinding = Keybinding(win, dir_list, dir, y)
+    move = Move()
 
+    c = 0
+    while not c == ord('l') or not c == ord('h'):
+        c = win.getch()
+        if c == ord('j') and y < len(dir_list):
+            move.down()
+        elif c == ord('k') and y > 1:
+            move.up()
+        elif c == ord('l'):
+            keybinding.dir_forward()
+        elif c == ord('h'):
+            keybinding.dir_back()
+        elif c == ord('e'):
+            keybinding.extract_item(archive)
+        elif c == ord('q'):
+            keybinding.exit()
+
+class Keybinding:
+    def __init__(self, win, dir_list, dir, y):
+        self.win = win
+        self.dir_list = dir_list
+        self.dir = dir
+        self.y = y
+
+#       if 'y2' in locals():
+#           win.move(y2, 1)
+#           win.addstr('     ')
+#           win.refresh()
+
+    def dir_forward(self):
+        if not self.dir == '':
+            new_dir = self.dir + "/" + self.dir_list[self.y - 1]
+        else:
+            new_dir = self.dir_list[self.y - 1]
+
+    def dir_back(self):
+        path_list = self.dir.split("/")
+        new_dir = '/'.join(path_list[:-1])
+
+    def extract_item(self, archive):
+        if not self.dir == '':
+            selected_dir = self.dir + '/' + self.dir_list[y - 1]
+        else:
+            selected_dir = self.dir_list[y - 1]
+        extract(archive, selected_dir)
+        y2 = len(self.dir_list) + 2
+        win.move(y2, 1)
+        win.addstr('done!')
+        win.refresh()
+
+    def exit(self):
+        sys.exit()
+
+class Move(Keybinding):
+    def __init__(self):
+        pass
+
+    def down(self):
+        win.move(y, 1)
+        win.addstr('   ')
+        y += 1
+        win.move(y, 1)
+        win.addstr("-->")
+        win.refresh()
+
+    def up(self):
+        win.move(y, 1)
+        win.addstr('   ')
+        y -= 1
+        win.move(y, 1)
+        win.addstr("-->")
 ### GUI ####
 
 if __name__ == '__main__':
