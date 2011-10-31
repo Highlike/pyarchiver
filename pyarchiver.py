@@ -39,10 +39,7 @@ def extract(archive, path):
     archive.extract(member)
 
 ### GUI ###
-def user_interaction(win, y, dir_list, archive, dir):
-    while True:
-        c = win.getch()
-
+class Keybinding:
         if 'y2' in locals():
             win.move(y2, 1)
             win.addstr('     ')
@@ -61,17 +58,23 @@ def user_interaction(win, y, dir_list, archive, dir):
             win.move(y, 1)
             win.addstr("-->")
             win.refresh()
+
+    def dir_forward():
         elif c == ord('l'):
             if not dir == '':
                 new_dir = dir + "/" + dir_list[y - 1]
             else:
                 new_dir = dir_list[y - 1]
             main(win, archive, new_dir)
+
+    def dir_back():
         elif c == ord('h'):
             win.erase()
             path_list = dir.split("/")
             new_dir = '/'.join(path_list[:-1])
             main(win, archive, new_dir)
+
+    def extract_item():
         elif c == ord('e'):
             if not dir == '':
                 selected_dir = dir + '/' + dir_list[y - 1]
@@ -82,6 +85,8 @@ def user_interaction(win, y, dir_list, archive, dir):
             win.move(y2, 1)
             win.addstr('done!')
             win.refresh()
+
+    def exit():
         elif c == ord('q'):
             sys.exit()
 
@@ -107,7 +112,9 @@ def main(win, archive, dir=''):
 
     win.refresh
 
-    user_interaction(win, y, dir_list, archive, dir)
+    while True:
+        Keybinding
+
 ### GUI ####
 
 if __name__ == '__main__':
