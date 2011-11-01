@@ -41,46 +41,47 @@ def extract(archive, path):
 ### GUI ###
 def initialize(screen, archive):
     win = curses.newwin(10, 90)
-    while True:
-        main(win, archive)
+    main(win, archive)
 
 def main(win, archive, dir=''):
-    win.erase()
-    try:
-        dir_list = tar_file_list(archive, dir)
-    except ValueError:
-        dir_list = ["Not a valid directory"]
-    x = 0
-    for item in dir_list:
-        x += 1
-        win.move(x, 6)
-        win.addstr(str(item))
-
-    y = 1
-    win.move(y, 1)
-    win.addstr("-->")
-
-    win.refresh
-
-    keybinding = Keybinding(win, dir_list, dir, y)
-    move = Move()
-
-    c = 0
-    while not c == ord('l') or not c == ord('h'):
-        c = win.getch()
-        if c == ord('j') and y < len(dir_list):
-            move.down()
-        elif c == ord('k') and y > 1:
-            move.up()
-        elif c == ord('l'):
-            keybinding.dir_forward()
-        elif c == ord('h'):
-            keybinding.dir_back()
-        elif c == ord('e'):
-            keybinding.extract_item(archive)
-        elif c == ord('q'):
-            keybinding.exit()
-
+    while True:
+        win.erase()
+        try:
+            dir_list = tar_file_list(archive, dir)
+        except ValueError:
+            dir_list = ["Not a valid directory"]
+        x = 0
+        for item in dir_list:
+            x += 1
+            win.move(x, 6)
+            win.addstr(str(item))
+        
+        y = 1
+        win.move(y, 1)
+        win.addstr("-->")
+        
+        win.refresh
+        
+        keybinding = Keybinding(win, dir_list, dir, y)
+        move = Move()
+        
+        while True:
+            c = win.getch()
+            if c == ord('j') and y < len(dir_list):
+                move.down()
+            elif c == ord('k') and y > 1:
+                move.up()
+            elif c == ord('l'):
+                keybinding.dir_forward()
+                break
+            elif c == ord('h'):
+                keybinding.dir_back()
+                break
+            elif c == ord('e'):
+                keybinding.extract_item(archive)
+            elif c == ord('q'):
+                keybinding.exit()
+    
 class Keybinding:
     def __init__(self, win, dir_list, dir, y):
         self.win = win
@@ -95,9 +96,9 @@ class Keybinding:
 
     def dir_forward(self):
         if not self.dir == '':
-            new_dir = self.dir + "/" + self.dir_list[self.y - 1]
+            self.new_dir = self.dir + "/" + self.dir_list[self.y - 1]
         else:
-            new_dir = self.dir_list[self.y - 1]
+            self.new_dir = self.dir_list[self.y - 1]
 
     def dir_back(self):
         path_list = self.dir.split("/")
