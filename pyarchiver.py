@@ -39,12 +39,11 @@ def extract(archive, path):
     archive.extract(member)
 
 ### GUI ###
-def initialize(screen, archive):
-    win = curses.newwin(10, 90)
-    main(win, archive)
+class Main(object):
+    def __init__(self, screen, archive):
+        win = curses.newwin(10, 90)
 
-def main(win, archive, dir=''):
-    while True:
+    def init_dir(self, win, archive, dir=''):
         win.erase()
         try:
             dir_list = tar_file_list(archive, dir)
@@ -61,28 +60,26 @@ def main(win, archive, dir=''):
         win.addstr("-->")
         
         win.refresh
+
+#       keybinding = Keybinding(win, dir_list, dir, y)
+#       move = Move()
         
-        keybinding = Keybinding(win, dir_list, dir, y)
-        move = Move()
-        
-        while True:
-            c = win.getch()
-            if c == ord('j') and y < len(dir_list):
-                move.down()
-            elif c == ord('k') and y > 1:
-                move.up()
-            elif c == ord('l'):
-                keybinding.dir_forward()
-                break
-            elif c == ord('h'):
-                keybinding.dir_back()
-                break
-            elif c == ord('e'):
-                keybinding.extract_item(archive)
-            elif c == ord('q'):
-                keybinding.exit()
+    def get_input(self, win, keybinding, move, y, dir_list):
+        c = win.getch()
+        if c == ord('j') and y < len(dir_list):
+            move.down()
+        elif c == ord('k') and y > 1:
+            move.up()
+        elif c == ord('l'):
+            keybinding.dir_forward()
+        elif c == ord('h'):
+            keybinding.dir_back()
+        elif c == ord('e'):
+            keybinding.extract_item(archive)
+        elif c == ord('q'):
+            keybinding.exit()
     
-class Keybinding:
+class Keybinding(object):
     def __init__(self, win, dir_list, dir, y):
         self.win = win
         self.dir_list = dir_list
@@ -143,7 +140,7 @@ if __name__ == '__main__':
     archive = determine_filetype(file)
     if archive == "is_tar":
         with tarfile.open(file) as f:
-            curses.wrapper(main, f)
+            curses.wrapper(initialize, f)
     elif archive == "is_zip":
         with zipfile.open(file) as f:
-            curses.wrapper(main, f)
+            curses.wrapper(initialize, f)
